@@ -55,3 +55,66 @@ Select
     SaleYear,
     SaleMonth,
     inventory_categories.Category;
+    -- Either We rank each store in south carolina or we look at online sale within sales territory.
+    -- Lets run with ranking each store
+Select 
+	sum(store_sales.sale_amount) as TotalSale,
+    store_sales.store_id
+    from store_sales
+    join store_locations
+		on store_sales.store_id = store_locations.storeid
+	where store_locations.state = 'South Carolina'
+    group  by 
+    store_sales.store_id
+    Order by Totalsale desc;
+    -- To determine what can be done, we must analyze what each store is producing in sales
+    -- sort by how each product is selling
+SELECT
+    store_locations.StoreId,
+    store_locations.StoreLocation,
+    inventory_categories.Category,
+    COUNT(store_sales.id) AS NumberOfSales,
+    ROUND(SUM(store_sales.Sale_Amount), 2) AS TotalSales,
+    ROUND(AVG(store_sales.Sale_Amount), 2) AS AverageSale
+FROM store_sales
+JOIN store_locations
+    ON store_sales.Store_ID = store_locations.StoreId
+JOIN products
+    ON store_sales.Prod_Num = products.ProdNum
+JOIN inventory_categories
+    ON products.Categoryid = inventory_categories.Categoryid
+WHERE store_locations.State = 'South Carolina'
+GROUP BY
+    store_locations.StoreId,
+    store_locations.StoreLocation,
+    inventory_categories.Category
+ORDER BY
+    store_locations.StoreId,
+    TotalSales DESC;
+    
+SELECT
+    sl.StoreLocation,
+    sl.StoreId,
+    YEAR(ss.Transaction_Date) AS SaleYear,
+    MONTH(ss.Transaction_Date) AS SaleMonth,
+    COUNT(ss.id) AS NumberOfSales,
+    ROUND(SUM(ss.Sale_Amount), 2) AS TotalSales,
+    ROUND(AVG(ss.Sale_Amount), 2) AS AverageSale
+FROM Store_Sales AS ss
+JOIN Store_Locations AS sl
+    ON ss.Store_ID = sl.StoreId
+WHERE sl.State = 'South Carolina'
+GROUP BY
+    sl.StoreLocation,
+    sl.StoreId,
+    YEAR(ss.Transaction_Date),
+    MONTH(ss.Transaction_Date)
+
+ORDER BY
+    SaleYear,
+    SaleMonth,
+    sl.StoreId;
+    -- recomendation 
+    -- push for greater promotion with bundles or timed promotions
+    -- test new pushes as these are stable locations
+    
