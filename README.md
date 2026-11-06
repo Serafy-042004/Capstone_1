@@ -12,3 +12,6 @@ Additionally if time permits, your team manager has sent you a number of other q
 and respond to using the sales database (in the Appendix). Create a second .sql script for the queries
 you use to explore these questions and save it to your project repository. This can optionally be included
 in your video demo as well.
+
+10 Min Video of Presentation:
+https://drive.google.com/file/d/18_u5c2UFbd2NMlZimmXhc4fEvYRPaAnY/view?usp=sharing 
